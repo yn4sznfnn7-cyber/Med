@@ -1,0 +1,100 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MedStudy — Semestre Aperto</title>
+<style>
+:root{--b:#1677ff;--ink:#111827;--mut:#667085;--line:#e7eaf0;--bg:#f7f8fa;--g:#18a66a;--r:#e5484d}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--ink);background:#fff}.app{max-width:760px;margin:auto;padding-bottom:90px}
+header{position:sticky;top:0;z-index:5;background:#fffE;padding:16px 18px 10px;border-bottom:1px solid #f0f1f3;backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:22px;font-weight:800}.brand span{color:var(--b)}.xp{color:var(--b);background:#eef5ff;padding:8px 11px;border-radius:99px;font-size:13px;font-weight:800}
+main{padding:18px}.hero{background:var(--bg);border:1px solid var(--line);border-radius:24px;padding:20px;margin-bottom:18px}
+h1{font-size:29px;line-height:1.05;letter-spacing:-1px;margin:10px 0}h2{font-size:22px;margin:20px 0 12px}h3{margin:0 0 6px}p{line-height:1.55;color:#4b5563}.small{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;background:#eef5ff;color:var(--b);padding:6px 9px;border-radius:99px;font-size:11px;font-weight:800}.bar{height:8px;background:#e9edf3;border-radius:9px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--b)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card,.lesson,.box{border:1px solid var(--line);border-radius:20px;background:#fff}.card{padding:17px;min-height:135px}.icon{font-size:30px}.progress{height:7px;background:#edf0f4;border-radius:9px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;background:var(--b)}
+.list{display:flex;flex-direction:column;gap:10px}.lesson{padding:14px;display:flex;align-items:center;gap:12px}.dot{width:36px;height:36px;border-radius:50%;background:#eef5ff;color:var(--b);display:grid;place-items:center;font-weight:800;flex:none}.lesson button,.primary{background:#111827;color:#fff;border:0;border-radius:12px;padding:10px 13px;font-weight:800}.lesson button{margin-left:auto}.primary{width:100%;background:var(--b);padding:14px;margin-top:12px}.back,.secondary{border:0;border-radius:12px;padding:10px 13px;font-weight:800;background:#f0f2f5}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{border:1px solid var(--line);border-radius:18px;padding:15px}.stat strong{display:block;font-size:23px}.nav{position:fixed;bottom:0;left:0;right:0;background:#fffF;border-top:1px solid var(--line);z-index:10}.navin{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}.nav button{background:none;border:0;padding:9px 2px;color:#7b8492;font-size:11px}.nav button b{display:block;font-size:20px}.nav button.active{color:var(--b);font-weight:800}
+.answer{display:block;width:100%;text-align:left;padding:14px;margin:7px 0;border:1px solid var(--line);border-radius:14px;background:#fff}.correct{border-color:var(--g);background:#effaf5}.wrong{border-color:var(--r);background:#fff1f2}.lessonbox{border:1px solid var(--line);border-radius:22px;padding:20px}.theory{font-size:16px;line-height:1.65}.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:11px 15px;border-radius:14px;font-weight:800;z-index:20}
+@media(max-width:550px){.grid{gap:9px}.card{padding:14px}}
+</style></head><body><div class="app">
+<header><div class="top"><div class="brand">Med<span>Study</span></div><div class="xp" id="xp">0 XP</div></div></header>
+<main id="main"></main></div>
+<nav class="nav"><div class="navin">
+<button data-p="home" class="active"><b>⌂</b>Home</button><button data-p="courses"><b>▦</b>Lezioni</button><button data-p="sim"><b>✓</b>Simulazioni</button><button data-p="profile"><b>♙</b>Profilo</button>
+</div></nav>
+<script>
+const S={
+bio:{n:"Biologia",i:"🧬",u:[
+["Basi molecolari della vita","Macromolecole biologiche, acqua, interazioni deboli e basi chimiche della materia vivente."],
+["Cellula","Procarioti ed eucarioti, membrana, nucleo, organelli, citoscheletro e compartimentazione."],
+["Membrane e trasporto","Diffusione, osmosi, trasporto attivo/passivo, endocitosi ed esocitosi."],
+["Metabolismo ed energia","ATP, enzimi, glicolisi, respirazione, ciclo di Krebs, fosforilazione ossidativa, fermentazione."],
+["DNA, RNA ed espressione genica","Replicazione, trascrizione, RNA, traduzione, codice genetico e regolazione."],
+["Genetica","Mendel, alleli, genotipo/fenotipo, linkage, ricombinazione, mutazioni ed ereditarietà."],
+["Epigenetica","Cromatina, metilazione, modifiche istoniche e regolazione dell'espressione genica."],
+["Ciclo cellulare","Checkpoint, mitosi, meiosi, crossing-over, gametogenesi, senescenza e apoptosi."],
+["Segnalazione cellulare","Recettori, ligandi, secondi messaggeri e trasduzione del segnale."],
+["Organizzazione biologica","Tessuti, omeostasi, comunicazione cellulare e collegamenti con la salute."]
+]},
+fis:{n:"Fisica",i:"⚛️",u:[
+["Metodi della fisica","Grandezza fisica, SI, dimensioni, conversioni, notazione scientifica, grafici e vettori."],
+["Cinematica","Posizione, spostamento, velocità, accelerazione e principali moti."],
+["Dinamica","Forze, leggi di Newton, attrito, lavoro, energia, potenza e quantità di moto."],
+["Equilibrio e rotazioni","Momento di una forza, equilibrio, baricentro, leve e pressione."],
+["Fluidi","Densità, Stevino, Pascal, Archimede, continuità, Bernoulli, viscosità e Poiseuille."],
+["Termologia e termodinamica","Temperatura, calore, gas, primo e secondo principio, entropia e macchine termiche."],
+["Onde e suono","Oscillazioni, frequenza, onde, intensità, suono ed effetto Doppler."],
+["Elettricità","Carica, campo, potenziale, corrente, resistenza, Ohm, circuiti, potenza e condensatori."],
+["Magnetismo","Campo magnetico, Lorentz, induzione elettromagnetica e legge di Faraday."],
+["Ottica e fisica moderna","Lenti, rifrazione, interferenza, fotoni, struttura atomica e radioattività."]
+]},
+chem:{n:"Chimica + propedeutica biochimica",i:"🧪",u:[
+["Struttura atomica","Protoni, neutroni, elettroni, isotopi, numeri quantici, orbitali e configurazioni."],
+["Tavola periodica","Gruppi, periodi, proprietà periodiche ed elementi biologicamente rilevanti."],
+["Legami e geometria","Ionico, covalente, coordinazione, polarità, geometria, legami H e interazioni deboli."],
+["Stati della materia e gas","Solidi, liquidi, gas, gas ideali, leggi dei gas e teoria cinetica."],
+["Termodinamica ed equilibrio","Entalpia, entropia, energia libera, spontaneità ed equilibrio chimico."],
+["Moli e reazioni","Mole, Avogadro, stechiometria, bilanciamento, numeri di ossidazione e nomenclatura."],
+["Soluzioni","Concentrazioni, diluizioni, solubilità, proprietà colligative e osmosi."],
+["Acidi, basi e tamponi","pH, Ka/Kb, acidi e basi, tamponi, Henderson-Hasselbalch ed equilibrio."],
+["Redox ed elettrochimica","Ossidazione, riduzione, agenti redox, potenziali e celle."],
+["Chimica organica","Carbonio, idrocarburi, alcoli, aldeidi, chetoni, acidi, derivati e ammine."],
+["Biomolecole","Carboidrati, lipidi, amminoacidi, proteine, nucleotidi e acidi nucleici."],
+["Biochimica propedeutica","ATP, reazioni accoppiate, bioenergetica, gruppi funzionali e processi biologici."]
+]}};
+const Q=[
+["bio","Quale molecola contiene normalmente l'informazione genetica?",["DNA","ATP","Glucosio","Colesterolo","Glicogeno"],0],
+["bio","L'osmosi riguarda principalmente il movimento di:",["Acqua","DNA","ATP","Ribosomi","Proteine"],0],
+["bio","La mitosi produce normalmente:",["Due cellule figlie","Quattro gameti","Una sola cellula","Due cellule aploidi","Solo cellule germinali"],0],
+["fis","Nel SI la forza si misura in:",["J","W","N","Pa","V"],2],
+["fis","La seconda legge di Newton è:",["p=mv","F=ma","V=RI","P=F/A","E=mc²"],1],
+["fis","La pressione è:",["Forza/area","Massa/volume","Lavoro/tempo","Energia/massa","Carica/tempo"],0],
+["chem","Il numero atomico indica il numero di:",["Neutroni","Protoni","Nucleoni","Orbitali","Molecole"],1],
+["chem","A 25 °C una soluzione neutra ha pH circa:",["0","1","5","7","14"],3],
+["chem","Una mole contiene circa:",["6,02×10²³ entità","6,02×10¹²","9,81×10²³","3×10⁸","1,6×10⁻¹⁹"],0]
+];
+let st=JSON.parse(localStorage.getItem("medstudy")||'{"xp":0,"done":{},"correct":0}'),page="home",sub=null,unit=0,exam=null;
+const $=id=>document.getElementById(id); function save(){localStorage.setItem("medstudy",JSON.stringify(st));$("xp").textContent=st.xp+" XP"}
+function level(){return Math.min(100,Math.floor(st.xp/100)+1)}
+function title(){let a=["Inizio","Avviato","Costante","Affidabile","Solido","Disciplinato","Avanzato","Esperto","Specialista","Veterano","Eccellente","Rigoroso","Maestro","Elite","Vertice","Dominante","Leggenda","Eccellenza","Assoluto","Fuoriclasse","Irraggiungibile"];return a[Math.min(20,Math.floor((level()-1)/5))]}
+function xp(n){st.xp+=n;save();toast("+"+n+" XP")}
+function toast(t){let e=document.createElement("div");e.className="toast";e.textContent=t;document.body.append(e);setTimeout(()=>e.remove(),1300)}
+function prog(k){return Math.round(S[k].u.filter((_,i)=>st.done[k+i]).length/S[k].u.length*100)}
+function go(p){page=p;render();scrollTo(0,0)}
+function render(){save();let m=$("main");
+if(page==="home"){m.innerHTML=`<section class="hero"><span class="badge">SEMESTRE APERTO · 2026/27</span><h1>Studia. Rispondi. Avanza. 🚀</h1><p>Un percorso progressivo in Biologia, Fisica e Chimica + propedeutica biochimica.</p><b>Livello ${level()} · ${title()}</b><div class="bar"><i style="width:${st.xp%100}%"></i></div></section><div class="stats"><div class="stat"><strong>${level()}</strong><span class="small">Livello</span></div><div class="stat"><strong>${st.xp}</strong><span class="small">XP</span></div><div class="stat"><strong>${st.correct}</strong><span class="small">Corrette</span></div></div><h2>Materie</h2><div class="grid">${Object.entries(S).map(([k,s])=>`<div class="card" onclick="openSub('${k}')"><div class="icon">${s.i}</div><h3>${s.n}</h3><span class="small">${prog(k)}% completato</span><div class="progress"><i style="width:${prog(k)}%"></i></div></div>`).join("")}</div><h2>Allenamento</h2><div class="list"><div class="lesson" onclick="go('sim')"><div class="dot">✓</div><div><b>Simulazione d'esame</b><div class="small">31 domande · 21 multiple + 10 completamento · 50 min</div></div></div><div class="lesson" onclick="quick()"><div class="dot">∞</div><div><b>Quiz rapido</b><div class="small">Allenati su un argomento casuale</div></div></div></div>`;
+}else if(page==="courses"){m.innerHTML=`<button class="back" onclick="go('home')">← Home</button><h2>Percorso</h2><p class="small">Le unità seguono i macro-argomenti del Syllabus MUR 2026/27.</p><div class="grid">${Object.entries(S).map(([k,s])=>`<div class="card" onclick="openSub('${k}')"><div class="icon">${s.i}</div><h3>${s.n}</h3><span class="small">${s.u.length} unità · ${prog(k)}%</span></div>`).join("")}</div>`;
+}else if(page==="subject"){let s=S[sub];m.innerHTML=`<button class="back" onclick="go('courses')">← Materie</button><section class="hero"><div class="icon">${s.i}</div><h1>${s.n}</h1><p>Teoria breve → checkpoint → completamento → sblocco della prossima unità.</p></section><div class="list">${s.u.map((u,i)=>{let done=!!st.done[sub+i],unlock=i===0||!!st.done[sub+(i-1)];return `<div class="lesson" style="opacity:${unlock?1:.45}"><div class="dot">${done?"✓":i+1}</div><div style="flex:1"><b>${u[0]}</b><div class="small">${u[1]}</div></div>${unlock?`<button onclick="openUnit('${sub}',${i})">${done?"Ripassa":"Inizia"}</button>`:"🔒"}</div>`}).join("")}</div>`;
+}else if(page==="lesson"){let s=S[sub],u=s.u[unit],qs=Q.filter(q=>q[0]===sub),q=qs[unit%qs.length];m.innerHTML=`<button class="back" onclick="go('subject')">← ${s.n}</button><div class="lessonbox"><span class="badge">UNITÀ ${unit+1}</span><h2>${u[0]}</h2><div class="theory"><p><b>Obiettivo:</b> ${u[1]}</p><p>Studia i concetti, collegali tra loro e prova a riconoscere l'applicazione corretta. Poi completa il checkpoint.</p></div><hr style="border:0;border-top:1px solid var(--line)"><span class="badge">CHECKPOINT</span><h3 style="margin-top:12px">${q[1]}</h3>${q[2].map((a,i)=>`<button class="answer" onclick="ans(${i},${q[3]},this)">${a}</button>`).join("")}<div id="next"></div></div>`;
+}else if(page==="profile"){m.innerHTML=`<section class="hero"><span class="badge">PROFILO</span><h1>Livello ${level()}</h1><p><b>${title()}</b> · ${st.xp} XP</p><div class="bar"><i style="width:${st.xp%100}%"></i></div></section><div class="stats"><div class="stat"><strong>${st.xp}</strong><span class="small">XP</span></div><div class="stat"><strong>${st.correct}</strong><span class="small">Corrette</span></div><div class="stat"><strong>100</strong><span class="small">Livelli</span></div></div><h2>Regole XP</h2><div class="list"><div class="lesson"><div class="dot">20</div><div><b>Checkpoint corretto</b><div class="small">+20 XP</div></div></div><div class="lesson"><div class="dot">50</div><div><b>Unità completata</b><div class="small">+50 XP</div></div></div></div><button class="secondary" style="margin-top:18px" onclick="reset()">Azzera progressi</button>`;
+}else if(page==="sim"){m.innerHTML=`<button class="back" onclick="go('home')">← Home</button><section class="hero"><span class="badge">SIMULAZIONE 2026/27</span><h1>31 domande</h1><p><b>21 a risposta multipla + 10 a completamento</b> · 50 minuti · +1 corretta · −0,1 errata · 0 omessa.</p><button class="primary" onclick="startExam()">Inizia simulazione</button></section><div class="box" style="padding:18px"><b>Modalità esame</b><p class="small">La struttura segue le regole ufficiali 2026/27. Il database locale di questa prima versione è un nucleo iniziale di allenamento.</p></div>`;
+}else if(page==="exam"){examRender(m)}}
+function openSub(k){sub=k;go("subject")}function openUnit(k,i){sub=k;unit=i;go("lesson")}
+function ans(i,c,b){document.querySelectorAll(".answer").forEach(x=>x.disabled=true);if(i===c){b.classList.add("correct");st.correct++;xp(20)}else{b.classList.add("wrong");document.querySelectorAll(".answer")[c].classList.add("correct");xp(5)}$("next").innerHTML=`<button class="primary" onclick="finishUnit()">Completa unità →</button>`}
+function finishUnit(){st.done[sub+unit]=true;xp(50);go("subject")}
+function quick(){let k=["bio","fis","chem"][Math.floor(Math.random()*3)];sub=k;unit=Math.floor(Math.random()*S[k].u.length);go("lesson")}
+function startExam(){let qs=[];for(let i=0;i<31;i++){let q=Q[i%Q.length];qs.push({q:q[1],o:q[2],a:q[3],type:i<21?"mc":"fill"})}exam={qs,i:0,score:0};page="exam";render()}
+function examRender(m){let q=exam.qs[exam.i];m.innerHTML=`<button class="back" onclick="exitExam()">← Esci</button><div class="lessonbox"><span class="badge">DOMANDA ${exam.i+1}/31</span><h2>${q.q}</h2>${q.type==="mc"?q.o.map((x,i)=>`<button class="answer" onclick="exAns(${i})">${x}</button>`).join(""):`<input id="fill" style="width:100%;padding:14px;border:1px solid var(--line);border-radius:13px;font-size:16px" placeholder="Completa la risposta">`}<button class="primary" onclick="${q.type==="mc"?"exAns(-1)":"exFill()"}">${exam.i===30?"Concludi":"Avanti"}</button></div>`}
+function exAns(i){let q=exam.qs[exam.i];if(i===q.a)exam.score+=1;else if(i>=0)exam.score-=.1;exam.i++;if(exam.i===31){let r=Math.max(0,exam.score);exam={result:r};xp(Math.max(20,Math.round(r*5)))}render()}
+function exFill(){let q=exam.qs[exam.i],v=$("fill").value.trim().toLowerCase(),c=q.o[q.a].toLowerCase();if(v&&v===c)exam.score++;else if(v)exam.score-=.1;exam.i++;if(exam.i===31){let r=Math.max(0,exam.score);exam={result:r};xp(Math.max(20,Math.round(r*5)))}render()}
+function exitExam(){exam=null;go("sim")}function reset(){if(confirm("Azzera tutti i progressi?")){localStorage.removeItem("medstudy");location.reload()}}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");go(b.dataset.p)})
+render();
+</script></body></html>
